@@ -4,39 +4,45 @@ struct ContentView: View {
     @StateObject private var viewModel = TutorViewModel()
 
     var body: some View {
-        ZStack {
-            LinearGradient(
-                colors: [
-                    Color(red: 0.98, green: 0.96, blue: 0.92),
-                    Color(red: 0.91, green: 0.84, blue: 0.75),
-                    Color(red: 0.76, green: 0.37, blue: 0.28),
-                ],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .ignoresSafeArea()
+        GeometryReader { proxy in
+            ZStack {
+                LinearGradient(
+                    colors: [
+                        Color(red: 0.98, green: 0.96, blue: 0.92),
+                        Color(red: 0.91, green: 0.84, blue: 0.75),
+                        Color(red: 0.76, green: 0.37, blue: 0.28),
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .ignoresSafeArea()
 
-            ScrollView {
-                VStack(spacing: 18) {
-                    headerCard
-                    modeCard
-                    holdButton
-                    transcriptCard(title: "You Said", text: viewModel.transcriptText.isEmpty ? "Nothing captured yet." : viewModel.transcriptText)
-                    transcriptCard(title: "Yuki", text: viewModel.assistantText.isEmpty ? "No reply yet." : viewModel.assistantText)
+                ScrollView {
+                    VStack(spacing: 18) {
+                        headerCard
+                        modeCard
+                        holdButton
+                        transcriptCard(title: "You Said", text: viewModel.transcriptText.isEmpty ? "Nothing captured yet." : viewModel.transcriptText)
+                        transcriptCard(title: "Yuki", text: viewModel.assistantText.isEmpty ? "No reply yet." : viewModel.assistantText)
 
-                    if !viewModel.englishHintText.isEmpty {
-                        transcriptCard(title: "English Help", text: viewModel.englishHintText)
+                        if !viewModel.englishHintText.isEmpty {
+                            transcriptCard(title: "English Help", text: viewModel.englishHintText)
+                        }
+
+                        if !viewModel.pronunciationText.isEmpty {
+                            transcriptCard(title: "Shadow Feedback", text: viewModel.pronunciationText)
+                        }
+
+                        helperCard
+                        quickActions
                     }
-
-                    if !viewModel.pronunciationText.isEmpty {
-                        transcriptCard(title: "Shadow Feedback", text: viewModel.pronunciationText)
-                    }
-
-                    helperCard
-                    quickActions
+                    .frame(maxWidth: .infinity)
+                    .frame(minHeight: proxy.size.height, alignment: .top)
+                    .padding(20)
                 }
-                .padding(20)
+                .scrollIndicators(.hidden)
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         }
     }
 
@@ -218,4 +224,3 @@ private struct FilledPillButtonStyle: ButtonStyle {
             .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
     }
 }
-

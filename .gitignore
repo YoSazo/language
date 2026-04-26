@@ -10,4 +10,5 @@ ios/JapaneseCoach/build/
 DerivedData/
 *.ipa
 *.xcarchive
-
+backend-server.log
+backend-server.err.log
