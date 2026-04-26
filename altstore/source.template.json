@@ -1,0 +1,38 @@
+{
+  "name": "Japanese Coach",
+  "identifier": "com.samat.japanesecoach.source",
+  "subtitle": "Local-first Japanese speaking practice",
+  "description": "Practice spoken Japanese with your own Ollama-powered tutor running on your PC.",
+  "iconURL": "https://raw.githubusercontent.com/OWNER/REPO/main/ios/JapaneseCoach/JapaneseCoach/Assets.xcassets/AppIcon.appiconset/icon-1024.png",
+  "website": "https://github.com/OWNER/REPO",
+  "apps": [
+    {
+      "name": "Japanese Coach",
+      "bundleIdentifier": "com.samat.japanesecoach",
+      "developerName": "samat",
+      "subtitle": "Talk to your local Japanese AI coach",
+      "localizedDescription": "Hold to talk, get short Japanese replies, explain lines on demand, and shadow the last sentence.",
+      "iconURL": "https://raw.githubusercontent.com/OWNER/REPO/main/ios/JapaneseCoach/JapaneseCoach/Assets.xcassets/AppIcon.appiconset/icon-1024.png",
+      "tintColor": "#B6402E",
+      "versions": [
+        {
+          "version": "0.1.0",
+          "buildVersion": "1",
+          "date": "2026-04-26",
+          "localizedDescription": "Initial local-first Japanese speaking coach release.",
+          "downloadURL": "https://github.com/OWNER/REPO/releases/download/v0.1.0/JapaneseCoach.ipa",
+          "size": 0,
+          "minOSVersion": "17.0"
+        }
+      ],
+      "appPermissions": {
+        "entitlements": [],
+        "privacy": {
+          "NSMicrophoneUsageDescription": "Japanese Coach needs the microphone so you can practice speaking Japanese aloud.",
+          "NSLocalNetworkUsageDescription": "Japanese Coach connects to your PC on your local network to transcribe and answer your speech."
+        }
+      }
+    }
+  ]
+}
+

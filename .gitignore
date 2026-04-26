@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+backend/data/
+backend/.env
+ios/JapaneseCoach/JapaneseCoach.xcodeproj/
+ios/JapaneseCoach/build/
+DerivedData/
+*.ipa
+*.xcarchive
+
