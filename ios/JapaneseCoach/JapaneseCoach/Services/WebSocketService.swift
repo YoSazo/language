@@ -13,6 +13,7 @@ final class WebSocketService {
     private var session: URLSession?
     private var task: URLSessionWebSocketTask?
     private var isConnected = false
+    private let sendQueue = DispatchQueue(label: "JapaneseCoach.WebSocketSendQueue")
 
     func connect(url: URL) {
         disconnect()
@@ -34,24 +35,29 @@ final class WebSocketService {
     }
 
     func sendJSON(_ payload: [String: Any]) {
-        guard let task else { return }
         guard let data = try? JSONSerialization.data(withJSONObject: payload),
               let text = String(data: data, encoding: .utf8) else { return }
-        task.send(.string(text)) { [weak self] error in
-            if let error {
-                DispatchQueue.main.async {
-                    self?.onEvent?(.failure(error.localizedDescription))
+        sendQueue.async { [weak self] in
+            guard let self, let task = self.task else { return }
+            task.send(.string(text)) { [weak self] error in
+                if let error {
+                    DispatchQueue.main.async {
+                        self?.onEvent?(.failure(error.localizedDescription))
+                    }
                 }
             }
         }
     }
 
     func sendAudio(_ data: Data) {
-        guard let task, !data.isEmpty else { return }
-        task.send(.data(data)) { [weak self] error in
-            if let error {
-                DispatchQueue.main.async {
-                    self?.onEvent?(.failure(error.localizedDescription))
+        guard !data.isEmpty else { return }
+        sendQueue.async { [weak self] in
+            guard let self, let task = self.task else { return }
+            task.send(.data(data)) { [weak self] error in
+                if let error {
+                    DispatchQueue.main.async {
+                        self?.onEvent?(.failure(error.localizedDescription))
+                    }
                 }
             }
         }
@@ -81,4 +87,3 @@ final class WebSocketService {
         }
     }
 }
-

@@ -5,8 +5,8 @@ settings:
   base:
     PRODUCT_NAME: JapaneseCoach
     PRODUCT_BUNDLE_IDENTIFIER: com.samat.japanesecoach
-    MARKETING_VERSION: 0.1.0
-    CURRENT_PROJECT_VERSION: 1
+    MARKETING_VERSION: 0.1.1
+    CURRENT_PROJECT_VERSION: 2
     SWIFT_VERSION: 5.10
     IPHONEOS_DEPLOYMENT_TARGET: "17.0"
     TARGETED_DEVICE_FAMILY: "1"
@@ -17,6 +17,14 @@ targets:
     deploymentTarget: "17.0"
     sources:
       - path: JapaneseCoach
+        excludes:
+          - Info.plist
+          - Assets.xcassets
+          - LaunchScreen.storyboard
+          - Preview Content
+    resources:
+      - path: JapaneseCoach/Assets.xcassets
+      - path: JapaneseCoach/LaunchScreen.storyboard
     info:
       path: JapaneseCoach/Info.plist
     settings:

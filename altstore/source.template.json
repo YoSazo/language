@@ -16,11 +16,11 @@
       "tintColor": "#B6402E",
       "versions": [
         {
-          "version": "0.1.0",
-          "buildVersion": "1",
+          "version": "0.1.1",
+          "buildVersion": "2",
           "date": "2026-04-26",
-          "localizedDescription": "Initial local-first Japanese speaking coach release.",
-          "downloadURL": "https://github.com/OWNER/REPO/releases/download/v0.1.0/JapaneseCoach.ipa",
+          "localizedDescription": "Fixes modern iPhone fullscreen behavior and stabilizes hold-to-talk audio.",
+          "downloadURL": "https://github.com/OWNER/REPO/releases/download/v0.1.1/JapaneseCoach.ipa",
           "size": 0,
           "minOSVersion": "17.0"
         }
@@ -35,4 +35,3 @@
     }
   ]
 }
-
