@@ -35,15 +35,17 @@ jobs:
             -sdk iphoneos \
             -destination 'generic/platform=iOS' \
             -derivedDataPath build \
+            CONFIGURATION_BUILD_DIR="$PWD/output" \
             CODE_SIGNING_ALLOWED=NO \
             clean build
 
-          APP_PATH=$(find build -type d -path '*Release-iphoneos/*.app' | head -n 1)
-          if [ -z "$APP_PATH" ]; then
+          APP_PATH="$PWD/output/JapaneseCoach.app"
+          if [ ! -d "$APP_PATH" ]; then
             echo "Could not find built .app"
             exit 1
           fi
 
+          ls -la "$APP_PATH"
           mkdir -p Payload
           cp -R "$APP_PATH" Payload/
           zip -qry JapaneseCoach.ipa Payload
@@ -61,4 +63,3 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: ios/JapaneseCoach/JapaneseCoach.ipa
-

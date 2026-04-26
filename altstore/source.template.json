@@ -16,11 +16,11 @@
       "tintColor": "#B6402E",
       "versions": [
         {
-          "version": "0.1.1",
-          "buildVersion": "2",
+          "version": "0.1.2",
+          "buildVersion": "3",
           "date": "2026-04-26",
-          "localizedDescription": "Fixes modern iPhone fullscreen behavior and stabilizes hold-to-talk audio.",
-          "downloadURL": "https://github.com/OWNER/REPO/releases/download/v0.1.1/JapaneseCoach.ipa",
+          "localizedDescription": "Packages the final built app bundle instead of the intermediate skeleton, restoring modern fullscreen behavior and app resources.",
+          "downloadURL": "https://github.com/OWNER/REPO/releases/download/v0.1.2/JapaneseCoach.ipa",
           "size": 0,
           "minOSVersion": "17.0"
         }
