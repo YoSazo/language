@@ -14,7 +14,7 @@ final class TutorViewModel: ObservableObject {
     @Published var vocabText = ""
     @Published var pronunciationText = ""
 
-    let settings = AppSettings()
+    var settings = AppSettings()
 
     private let webSocket = WebSocketService()
     private let audioCapture = AudioCaptureService()
