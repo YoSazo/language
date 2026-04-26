@@ -21,12 +21,11 @@ targets:
           - Info.plist
           - Assets.xcassets
           - LaunchScreen.storyboard
-          - Preview Content
-    resources:
+          - Preview Content/**
       - path: JapaneseCoach/Assets.xcassets
+        buildPhase: resources
       - path: JapaneseCoach/LaunchScreen.storyboard
-    info:
-      path: JapaneseCoach/Info.plist
+        buildPhase: resources
     settings:
       base:
         PRODUCT_NAME: JapaneseCoach

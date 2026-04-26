@@ -34,18 +34,25 @@ jobs:
             -configuration Release \
             -sdk iphoneos \
             -destination 'generic/platform=iOS' \
-            -derivedDataPath build \
-            CONFIGURATION_BUILD_DIR="$PWD/output" \
+            -archivePath "$PWD/build/JapaneseCoach.xcarchive" \
+            SKIP_INSTALL=NO \
             CODE_SIGNING_ALLOWED=NO \
-            clean build
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            clean archive
 
-          APP_PATH="$PWD/output/JapaneseCoach.app"
+          APP_PATH="$PWD/build/JapaneseCoach.xcarchive/Products/Applications/JapaneseCoach.app"
           if [ ! -d "$APP_PATH" ]; then
             echo "Could not find built .app"
             exit 1
           fi
 
           ls -la "$APP_PATH"
+          test -f "$APP_PATH/Assets.car"
+          test -d "$APP_PATH/LaunchScreen.storyboardc"
+          /usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "$APP_PATH/Info.plist"
+          /usr/libexec/PlistBuddy -c "Print :CFBundleVersion" "$APP_PATH/Info.plist"
+          /usr/libexec/PlistBuddy -c "Print :UILaunchStoryboardName" "$APP_PATH/Info.plist"
           mkdir -p Payload
           cp -R "$APP_PATH" Payload/
           zip -qry JapaneseCoach.ipa Payload
