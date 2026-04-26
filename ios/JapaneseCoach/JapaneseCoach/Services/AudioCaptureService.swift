@@ -52,6 +52,8 @@ final class AudioCaptureService {
         self.converter = converter
 
         inputNode.removeTap(onBus: 0)
+        engine.stop()
+        engine.reset()
         inputNode.installTap(onBus: 0, bufferSize: 2_048, format: inputFormat) { [weak self] buffer, _ in
             guard let self, let converter = self.converter else { return }
             var sourceBuffer: AVAudioPCMBuffer? = buffer
@@ -87,12 +89,12 @@ final class AudioCaptureService {
     }
 
     func stop() {
-        guard isStreaming else { return }
+        guard isStreaming || engine.isRunning else { return }
         engine.inputNode.removeTap(onBus: 0)
         engine.stop()
+        engine.reset()
         converter = nil
         try? AVAudioSession.sharedInstance().setActive(false, options: [.notifyOthersOnDeactivation])
         isStreaming = false
     }
 }
-

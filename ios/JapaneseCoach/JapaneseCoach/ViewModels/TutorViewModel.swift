@@ -19,6 +19,8 @@ final class TutorViewModel: ObservableObject {
     private let webSocket = WebSocketService()
     private let audioCapture = AudioCaptureService()
     private let speech = SpeechService()
+    private var isStartingRecording = false
+    private var recordingRequestToken = UUID()
 
     init() {
         webSocket.onEvent = { [weak self] event in
@@ -39,7 +41,7 @@ final class TutorViewModel: ObservableObject {
     }
 
     func disconnect() {
-        if isRecording {
+        if isRecording || isStartingRecording {
             endTalking()
         }
         webSocket.disconnect()
@@ -48,16 +50,26 @@ final class TutorViewModel: ObservableObject {
     }
 
     func beginTalking() {
-        guard connectionState == .connected, !isRecording else { return }
+        guard connectionState == .connected, !isRecording, !isStartingRecording else { return }
 
         if selectedMode == .shadowing && assistantText.isEmpty {
             statusText = "Say one line in Conversation mode first, then shadow it."
             return
         }
 
+        let requestToken = UUID()
+        let mode = selectedMode
+        let shadowTarget = assistantText
+        recordingRequestToken = requestToken
+        isStartingRecording = true
+        speech.stop()
+        statusText = "Preparing microphone..."
+
         Task {
             let granted = await audioCapture.requestPermission()
+            guard recordingRequestToken == requestToken else { return }
             guard granted else {
+                isStartingRecording = false
                 statusText = "Microphone permission was denied."
                 return
             }
@@ -65,26 +77,40 @@ final class TutorViewModel: ObservableObject {
             do {
                 var payload: [String: Any] = [
                     "type": "start_turn",
-                    "mode": selectedMode.socketMode,
+                    "mode": mode.socketMode,
                 ]
-                if selectedMode == .shadowing {
-                    payload["target_text"] = assistantText
+                if mode == .shadowing {
+                    payload["target_text"] = shadowTarget
                 }
                 webSocket.sendJSON(payload)
                 try audioCapture.startStreaming { [weak self] data in
                     self?.webSocket.sendAudio(data)
                 }
+                guard recordingRequestToken == requestToken else {
+                    audioCapture.stop()
+                    return
+                }
+                isStartingRecording = false
                 isRecording = true
                 pronunciationText = ""
                 statusText = "Listening..."
             } catch {
+                isStartingRecording = false
                 statusText = error.localizedDescription
             }
         }
     }
 
     func endTalking() {
+        if isStartingRecording {
+            recordingRequestToken = UUID()
+            isStartingRecording = false
+            statusText = "Recording cancelled."
+            return
+        }
+
         guard isRecording else { return }
+        recordingRequestToken = UUID()
         audioCapture.stop()
         webSocket.sendJSON(["type": "end_audio"])
         isRecording = false
@@ -116,6 +142,7 @@ final class TutorViewModel: ObservableObject {
             ])
         case .disconnected:
             connectionState = .disconnected
+            isStartingRecording = false
             isRecording = false
         case .failure(let message):
             statusText = message

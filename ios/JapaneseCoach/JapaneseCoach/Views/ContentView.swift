@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject private var viewModel = TutorViewModel()
+    @State private var isPressingHoldButton = false
 
     var body: some View {
         GeometryReader { proxy in
@@ -148,11 +149,13 @@ struct ContentView: View {
                 .gesture(
                     DragGesture(minimumDistance: 0)
                         .onChanged { _ in
-                            if !viewModel.isRecording {
+                            if !isPressingHoldButton {
+                                isPressingHoldButton = true
                                 viewModel.beginTalking()
                             }
                         }
                         .onEnded { _ in
+                            isPressingHoldButton = false
                             viewModel.endTalking()
                         }
                 )
